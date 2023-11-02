@@ -64,3 +64,8 @@ RIGHT JOIN products ON orders.product_id = products.product_id;
 SELECT * FROM customers
 FULL JOIN orders ON orders.customer_id = customers.customer_id
 FULL JOIN products ON orders.product_id = products.product_id;
+
+
+DROP TABLE orders;
+DROP TABLE customers;
+DROP TABLE products;
