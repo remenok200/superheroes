@@ -8,7 +8,7 @@ module.exports.getHeroPowers = async (req, res, next) => {
     } = req;
 
     const powers = await SuperPower.findAll({
-      heroId,
+      where: { heroId },
     });
 
     return res.send({ data: powers });
@@ -32,7 +32,7 @@ module.exports.addHeroPowers = async (req, res, next) => {
       return next(createHttpError(400));
     }
 
-    return res.send({ data: createdPowers });
+    return res.status(200).send({ data: createdPowers });
   } catch (error) {
     next(error);
   }
@@ -48,7 +48,7 @@ module.exports.deletePower = async (req, res, next) => {
       where: { heroId, id: powerId },
     });
 
-    if(count === 0) {
+    if (count === 0) {
       return next(createHttpError(404));
     }
 
@@ -57,3 +57,32 @@ module.exports.deletePower = async (req, res, next) => {
     next(error);
   }
 };
+
+/*
+
+
+
+POST .../25/addSuperpowers HTTP/1.1
+Content-type: application/json
+
+{
+  powers: ['Fly', 'Invisibility']
+}
+
+const powers = body.powers.map((name) => ({ name, heroId }));
+
+powers -> [
+  {
+    name: 'Fly',
+    heroId: 25
+  }, 
+  {
+    name: 'Invisibility',
+    heroId: 25
+  }
+]
+
+const createdPowers = await SuperPower.bulkCreate(powers);
+
+
+*/
