@@ -53,4 +53,25 @@ module.exports.getImage = async (req, res, next) => {
   }
 };
 
-// TODO: deleteImage -> Image.destroy({....})
+module.exports.deleteImage = async (req, res, next) => {
+  try {
+    const {
+      params: { heroId, imageId },
+    } = req;
+
+    const count = await Image.destroy({
+      where: {
+        heroId,
+        id: imageId,
+      },
+    });
+
+    if (count === 0) {
+      return next(createHttpError(404));
+    }
+
+    return res.status(200).end();
+  } catch (error) {
+    next(error);
+  }
+};
