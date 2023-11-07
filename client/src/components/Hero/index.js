@@ -1,18 +1,32 @@
 import React from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import styles from './Hero.module.scss';
 
 const Hero = ({ hero }) => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   return (
     <article>
       <h1>{hero.nickname}</h1>
       <h2>Also known as {hero.realName}</h2>
 
-      {hero.images.map((image) => (
-        <img
-          key={image.id}
-          src={`http://localhost:5000/images/${image.path}`}
-          alt={hero.nickname}
-        />
-      ))}
+      <Slider className={styles.slider} {...settings}>
+        {hero.images.map((image) => (
+          <img
+            key={image.id}
+            src={`http://localhost:5000/images/${image.path}`}
+            alt={hero.nickname}
+          />
+        ))}
+      </Slider>
 
       <p>Catch phrase: {hero.catchPhrase}</p>
       <p>Origin Description:</p>

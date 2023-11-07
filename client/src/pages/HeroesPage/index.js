@@ -2,6 +2,7 @@ import Hero from 'components/Hero';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getHeroes } from 'redux/slices/heroSlice';
+import styles from './Heroes.module.scss';
 
 const HeroesPage = () => {
   const { heroes, isLoading, error } = useSelector((state) => state.heroes);
