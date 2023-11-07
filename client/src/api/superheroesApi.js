@@ -8,3 +8,6 @@ export const getHeroes = async () => await httpClient.get('/superheroes');
 
 export const deleteHero = async (heroId) =>
   await httpClient.delete(`/superheroes/${heroId}`);
+
+export const deletePower = async (heroId, powerId) =>
+  await httpClient.delete(`/superheroes/${heroId}/powers/${powerId}`);

@@ -1,7 +1,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 
-import { deleteHero } from 'api/superheroesApi';
+import { deleteHero, deletePower } from 'api/superheroesApi';
 import { getHeroes } from 'redux/slices/heroSlice';
 import { useDispatch } from 'react-redux';
 
@@ -22,6 +22,11 @@ const Hero = ({ hero }) => {
 
   const deleteHandler = async () => {
     await deleteHero(hero.id);
+    dispatch(getHeroes());
+  };
+
+  const deletePowerHandler = async (powerId) => {
+    await deletePower(hero.id, powerId);
     dispatch(getHeroes());
   };
 
@@ -46,7 +51,20 @@ const Hero = ({ hero }) => {
 
       <ul>
         {hero.superPowers.map((power) => (
-          <li key={power.id}>{power.name}</li>
+          <table key={power.id}>
+            <tbody>
+              <tr>
+                <td>
+                  <li>{power.name}</li>
+                </td>
+                <td>
+                  <button onClick={() => deletePowerHandler(power.id)}>
+                    Delete power
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         ))}
       </ul>
 
