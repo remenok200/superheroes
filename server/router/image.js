@@ -11,7 +11,7 @@ imageRouter
 
 // localhost:5000/api/superheroes/<heroId>/images/<imageId>
 imageRouter
-  .route(':imageId')
+  .route('/:imageId')
   .get(ImageController.getImage)
   .delete(ImageController.deleteImage);
 
