@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as API from 'api';
+import * as API from 'api/superheroesApi';
 
 const SLICE_NAME = 'heroes';
 
