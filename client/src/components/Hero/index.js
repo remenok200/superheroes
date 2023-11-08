@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Slider from 'react-slick';
 
-import { deleteHero, deletePower } from 'api/superheroesApi';
+import { deletePower } from 'api/superheroesApi';
 import { getHeroes } from 'redux/slices/heroSlice';
 import { useDispatch } from 'react-redux';
 
@@ -9,7 +9,11 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './Hero.module.scss';
 
+import DeleteHeroModal from 'components/Modals/DeleteHeroModal';
+
 const Hero = ({ hero }) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const dispatch = useDispatch();
 
   const settings = {
@@ -18,11 +22,6 @@ const Hero = ({ hero }) => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-  };
-
-  const deleteHandler = async () => {
-    await deleteHero(hero.id);
-    dispatch(getHeroes());
   };
 
   const deletePowerHandler = async (powerId) => {
@@ -68,7 +67,12 @@ const Hero = ({ hero }) => {
         ))}
       </ul>
 
-      <button onClick={deleteHandler}>Delete superhero</button>
+      <button onClick={() => setIsDeleteModalOpen(true)}>
+        Delete superhero
+      </button>
+      {isDeleteModalOpen && (
+        <DeleteHeroModal hero={hero} isDeleteModalOpen={isDeleteModalOpen} setIsModalOpen={setIsDeleteModalOpen} />
+      )}
     </article>
   );
 };
