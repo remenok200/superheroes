@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Slider from 'react-slick';
 
-import { deletePower } from 'api/superheroesApi';
+import { deletePower, addPower } from 'api/superheroesApi';
 import { getHeroes } from 'redux/slices/heroSlice';
 import { useDispatch } from 'react-redux';
 
@@ -10,9 +10,11 @@ import 'slick-carousel/slick/slick-theme.css';
 import styles from './Hero.module.scss';
 
 import DeleteHeroModal from 'components/Modals/DeleteHeroModal';
+import AddPowerModal from 'components/Modals/AddPowerModal';
 
 const Hero = ({ hero }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isAddPowerModalOpen, setIsAddPowerModalOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -67,11 +69,28 @@ const Hero = ({ hero }) => {
         ))}
       </ul>
 
+      {/* Add superpower modal */}
+      <button onClick={() => setIsAddPowerModalOpen(true)}>
+        Add superpower
+      </button>
+      {isAddPowerModalOpen && (
+        <AddPowerModal
+          hero={hero}
+          isAddPowerModalOpen={isAddPowerModalOpen}
+          setIsModalOpen={setIsAddPowerModalOpen}
+        />
+      )}
+
+      {/* Delete superhero modal */}
       <button onClick={() => setIsDeleteModalOpen(true)}>
         Delete superhero
       </button>
       {isDeleteModalOpen && (
-        <DeleteHeroModal hero={hero} isDeleteModalOpen={isDeleteModalOpen} setIsModalOpen={setIsDeleteModalOpen} />
+        <DeleteHeroModal
+          hero={hero}
+          isDeleteModalOpen={isDeleteModalOpen}
+          setIsModalOpen={setIsDeleteModalOpen}
+        />
       )}
     </article>
   );
