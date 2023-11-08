@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Slider from 'react-slick';
 
-import { deletePower, addPower } from 'api/superheroesApi';
+import { deletePower, deleteImage } from 'api/superheroesApi';
 import { getHeroes } from 'redux/slices/heroSlice';
 import { useDispatch } from 'react-redux';
 
@@ -20,6 +20,8 @@ const Hero = ({ hero }) => {
   const [isEditHeroModalOpen, setIsEditHeroModalOpen] = useState(false);
   const [isHeroImageAddModalOpen, setIsHeroImageAddModalOpen] = useState(false);
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+
   const dispatch = useDispatch();
 
   const settings = {
@@ -28,10 +30,18 @@ const Hero = ({ hero }) => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    afterChange: (currentIndex) => {
+      setCurrentSlide(currentIndex);
+    },
   };
 
   const deletePowerHandler = async (powerId) => {
     await deletePower(hero.id, powerId);
+    dispatch(getHeroes());
+  };
+
+  const deleteImageHandler = async () => {
+    await deleteImage(hero.id, hero.images[currentSlide].id);
     dispatch(getHeroes());
   };
 
@@ -107,6 +117,12 @@ const Hero = ({ hero }) => {
           isAddPowerModalOpen={isAddPowerModalOpen}
           setIsModalOpen={setIsAddPowerModalOpen}
         />
+      )}
+
+      {hero.images.length > 0 && (
+        <button onClick={deleteImageHandler}>
+          Delete current image in the slider
+        </button>
       )}
 
       {/* Delete superhero modal */}
