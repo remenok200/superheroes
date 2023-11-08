@@ -12,11 +12,13 @@ import styles from './Hero.module.scss';
 import DeleteHeroModal from 'components/Modals/DeleteHeroModal';
 import AddPowerModal from 'components/Modals/AddPowerModal';
 import EditHeroModal from 'components/Modals/EditHeroModal';
+import AddHeroImageModal from 'components/Modals/AddHeroImageModal';
 
 const Hero = ({ hero }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddPowerModalOpen, setIsAddPowerModalOpen] = useState(false);
   const [isEditHeroModalOpen, setIsEditHeroModalOpen] = useState(false);
+  const [isHeroImageAddModalOpen, setIsHeroImageAddModalOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -80,6 +82,18 @@ const Hero = ({ hero }) => {
           hero={hero}
           isEditHeroModalOpen={isEditHeroModalOpen}
           setIsModalOpen={setIsEditHeroModalOpen}
+        />
+      )}
+
+      {/* Add hero image modal */}
+      <button onClick={() => setIsHeroImageAddModalOpen(true)}>
+        Add image(s)
+      </button>
+      {isHeroImageAddModalOpen && (
+        <AddHeroImageModal
+          hero={hero}
+          isHeroImageAddModalOpen={isHeroImageAddModalOpen}
+          setIsModalOpen={setIsHeroImageAddModalOpen}
         />
       )}
 
