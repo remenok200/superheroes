@@ -26,8 +26,8 @@ const AddPowerModal = ({ hero, isAddPowerModalOpen, setIsModalOpen }) => {
         powers: [values.powerName],
       });
       dispatch(getHeroes());
-      setIsModalOpen(false);
       resetForm();
+      setIsModalOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -39,6 +39,7 @@ const AddPowerModal = ({ hero, isAddPowerModalOpen, setIsModalOpen }) => {
       style={customStyles}
       onRequestClose={() => setIsModalOpen(false)}
     >
+      <h2>Add superpower</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={VALIDATION_POWER_SCHEMA}

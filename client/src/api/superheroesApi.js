@@ -14,3 +14,6 @@ export const deletePower = async (heroId, powerId) =>
 
 export const addPower = async (heroId, powers) =>
   await httpClient.post(`/superheroes/${heroId}/powers`, powers);
+
+export const editHero = async (heroId, updates) =>
+  await httpClient.put(`/superheroes/${heroId}`, updates);

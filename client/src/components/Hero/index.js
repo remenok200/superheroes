@@ -11,10 +11,12 @@ import styles from './Hero.module.scss';
 
 import DeleteHeroModal from 'components/Modals/DeleteHeroModal';
 import AddPowerModal from 'components/Modals/AddPowerModal';
+import EditHeroModal from 'components/Modals/EditHeroModal';
 
 const Hero = ({ hero }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddPowerModalOpen, setIsAddPowerModalOpen] = useState(false);
+  const [isEditHeroModalOpen, setIsEditHeroModalOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -68,6 +70,18 @@ const Hero = ({ hero }) => {
           </table>
         ))}
       </ul>
+
+      {/* Edit hero modal */}
+      <button onClick={() => setIsEditHeroModalOpen(true)}>
+        Edit superhero
+      </button>
+      {isEditHeroModalOpen && (
+        <EditHeroModal
+          hero={hero}
+          isEditHeroModalOpen={isEditHeroModalOpen}
+          setIsModalOpen={setIsEditHeroModalOpen}
+        />
+      )}
 
       {/* Add superpower modal */}
       <button onClick={() => setIsAddPowerModalOpen(true)}>
