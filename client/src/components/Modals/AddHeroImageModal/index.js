@@ -14,6 +14,7 @@ const AddHeroImageModal = ({
   hero,
   isHeroImageAddModalOpen,
   setIsModalOpen,
+  currentPageNumber
 }) => {
   const dispatch = useDispatch();
 
@@ -32,7 +33,7 @@ const AddHeroImageModal = ({
         }
       );
       if (response.ok) {
-        dispatch(getHeroes());
+        dispatch(getHeroes(currentPageNumber));
       }
     } catch (error) {
       console.error(error);

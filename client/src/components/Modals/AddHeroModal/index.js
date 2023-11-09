@@ -13,13 +13,18 @@ import { useDispatch } from 'react-redux';
 
 Modal.setAppElement('#root');
 
-const AddHeroModel = ({ isAddHeroModalOpen, setIsModalOpen }) => {
+const AddHeroModal = ({
+  isAddHeroModalOpen,
+  setIsModalOpen,
+  setCurrentPageNumber,
+}) => {
   const dispatch = useDispatch();
 
   const handleAddHeroSubmit = async (values, { resetForm }) => {
     try {
       await addHero(values);
       dispatch(getHeroes());
+      setCurrentPageNumber(0);
       resetForm();
       setIsModalOpen(false);
     } catch (error) {
@@ -81,4 +86,4 @@ const AddHeroModel = ({ isAddHeroModalOpen, setIsModalOpen }) => {
   );
 };
 
-export default AddHeroModel;
+export default AddHeroModal;

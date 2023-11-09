@@ -13,13 +13,14 @@ import { useDispatch } from 'react-redux';
 
 Modal.setAppElement('#root');
 
-const EditHeroModal = ({ hero, isEditHeroModalOpen, setIsModalOpen }) => {
+const EditHeroModal = ({ hero, isEditHeroModalOpen, setIsModalOpen, setCurrentPageNumber }) => {
   const dispatch = useDispatch();
 
   const handleEditHeroSubmit = async (values, { resetForm }) => {
     try {
       await editHero(hero.id, values);
       dispatch(getHeroes());
+      setCurrentPageNumber(0);
       resetForm();
       setIsModalOpen(false);
     } catch (error) {

@@ -3,28 +3,60 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getHeroes } from 'redux/slices/heroSlice';
 
+import CONSTANTS from 'constants/paginate';
+
 import Hero from 'components/Hero';
-import AddHeroModel from 'components/Modals/AddHeroModal';
+import AddHeroModal from 'components/Modals/AddHeroModal';
 
 import styles from './Heroes.module.scss';
 
 const HeroesPage = () => {
-  const { heroes, isLoading, error } = useSelector((state) => state.heroes);
+  const { heroes, totalHeroesCount, isLoading, error } = useSelector(
+    (state) => state.heroes
+  );
   const dispatch = useDispatch();
 
   const [searchHero, setSearchHero] = useState('');
   const [isAddHeroModalOpen, setIsAddHeroModalOpen] = useState(false);
 
+  const [currentPageNumber, setCurrentPageNumber] = useState(0);
+  const [maxPageNumber, setMaxPageNumber] = useState(0);
+  const [prevButtonDisabled, setPrevButtonDisabled] = useState(true);
+  const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
+
   useEffect(() => {
-    dispatch(getHeroes());
-  }, []);
+    setPrevButtonDisabled(currentPageNumber === 0);
+    setNextButtonDisabled(currentPageNumber === maxPageNumber - 1);
+  }, [currentPageNumber, maxPageNumber]);
+
+  useEffect(() => {
+    setMaxPageNumber(Math.ceil(totalHeroesCount / CONSTANTS.ITEMS_PER_PAGE));
+    dispatch(getHeroes(currentPageNumber));
+  }, [currentPageNumber, totalHeroesCount]);
+
+  const nextPageHandler = () => {
+    if (currentPageNumber < maxPageNumber - 1) {
+      setCurrentPageNumber(currentPageNumber + 1);
+    }
+  };
+
+  const prevPageHandler = () => {
+    if (currentPageNumber > 0) {
+      setCurrentPageNumber(currentPageNumber - 1);
+    }
+  };
 
   const filteredHeroes = heroes.filter((hero) =>
     hero.nickname.toLowerCase().includes(searchHero.toLowerCase())
   );
 
   const heroesCards = filteredHeroes.map((hero) => (
-    <Hero key={hero.id} hero={hero} />
+    <Hero
+      key={hero.id}
+      hero={hero}
+      currentPageNumber={currentPageNumber}
+      setCurrentPageNumber={setCurrentPageNumber}
+    />
   ));
 
   return (
@@ -40,15 +72,27 @@ const HeroesPage = () => {
       <button onClick={() => setIsAddHeroModalOpen(true)}>Add superhero</button>
 
       {isAddHeroModalOpen && (
-        <AddHeroModel
+        <AddHeroModal
           isAddHeroModalOpen={isAddHeroModalOpen}
           setIsModalOpen={setIsAddHeroModalOpen}
+          setCurrentPageNumber={setCurrentPageNumber}
         />
       )}
 
       {isLoading && <h1>LOADING...</h1>}
       {error && <h1>ERROR...</h1>}
       {heroesCards}
+
+      <div>
+        <button onClick={prevPageHandler} disabled={prevButtonDisabled}>
+          Previous Page
+        </button>
+        <button onClick={nextPageHandler} disabled={nextButtonDisabled}>
+          Next page
+        </button>
+        <p>You are on the page: {currentPageNumber + 1}</p>
+        <p>Total number of pages: {maxPageNumber}</p>
+      </div>
     </section>
   );
 };

@@ -14,7 +14,7 @@ import AddPowerModal from 'components/Modals/AddPowerModal';
 import EditHeroModal from 'components/Modals/EditHeroModal';
 import AddHeroImageModal from 'components/Modals/AddHeroImageModal';
 
-const Hero = ({ hero }) => {
+const Hero = ({ hero, currentPageNumber, setCurrentPageNumber }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddPowerModalOpen, setIsAddPowerModalOpen] = useState(false);
   const [isEditHeroModalOpen, setIsEditHeroModalOpen] = useState(false);
@@ -37,12 +37,12 @@ const Hero = ({ hero }) => {
 
   const deletePowerHandler = async (powerId) => {
     await deletePower(hero.id, powerId);
-    dispatch(getHeroes());
+    dispatch(getHeroes(currentPageNumber));
   };
 
   const deleteImageHandler = async () => {
     await deleteImage(hero.id, hero.images[currentSlide].id);
-    dispatch(getHeroes());
+    dispatch(getHeroes(currentPageNumber));
   };
 
   return (
@@ -92,6 +92,7 @@ const Hero = ({ hero }) => {
           hero={hero}
           isEditHeroModalOpen={isEditHeroModalOpen}
           setIsModalOpen={setIsEditHeroModalOpen}
+          setCurrentPageNumber={setCurrentPageNumber}
         />
       )}
 
@@ -104,6 +105,7 @@ const Hero = ({ hero }) => {
           hero={hero}
           isHeroImageAddModalOpen={isHeroImageAddModalOpen}
           setIsModalOpen={setIsHeroImageAddModalOpen}
+          currentPageNumber={currentPageNumber}
         />
       )}
 
@@ -116,6 +118,7 @@ const Hero = ({ hero }) => {
           hero={hero}
           isAddPowerModalOpen={isAddPowerModalOpen}
           setIsModalOpen={setIsAddPowerModalOpen}
+          currentPageNumber={currentPageNumber}
         />
       )}
 
@@ -134,6 +137,7 @@ const Hero = ({ hero }) => {
           hero={hero}
           isDeleteModalOpen={isDeleteModalOpen}
           setIsModalOpen={setIsDeleteModalOpen}
+          currentPageNumber={currentPageNumber}
         />
       )}
     </article>

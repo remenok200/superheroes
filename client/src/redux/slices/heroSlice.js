@@ -1,16 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as API from 'api/superheroesApi';
+import CONSTANTS from 'constants/paginate';
 
 const SLICE_NAME = 'heroes';
 
 const getHeroes = createAsyncThunk(
   `${SLICE_NAME}/getHeroes`,
-  async (param, thunkAPI) => {
+  async (pageNumber = 0, thunkAPI) => {
     try {
+      const limit = CONSTANTS.ITEMS_PER_PAGE;
+      const offset = pageNumber * limit;
+
       const {
-        data: { data: superheroes },
-      } = await API.getHeroes();
-      return superheroes;
+        data: { data: superheroes, totalHeroesCount },
+      } = await API.getHeroes(limit, offset);
+
+      return { superheroes, totalHeroesCount };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -21,6 +26,7 @@ const initialState = {
   heroes: [],
   isLoading: false,
   error: null,
+  totalHeroesCount: 0,
 };
 
 const heroSlice = createSlice({
@@ -35,7 +41,10 @@ const heroSlice = createSlice({
     builder.addCase(getHeroes.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = null;
-      state.heroes = action.payload;
+
+      const { superheroes, totalHeroesCount } = action.payload;
+      state.heroes = superheroes;
+      state.totalHeroesCount = totalHeroesCount;
     });
     builder.addCase(getHeroes.rejected, (state, action) => {
       state.isLoading = false;

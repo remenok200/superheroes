@@ -78,7 +78,9 @@ module.exports.getHeroes = async (req, res, next) => {
       return next(createHttpError(404));
     }
 
-    return res.send({ data: heroes });
+    const totalHeroesCount = await Superhero.count();
+
+    return res.send({ data: heroes, totalHeroesCount });
   } catch (error) {
     next(error);
   }

@@ -9,12 +9,12 @@ import { customStyles } from 'common/styles/customStylesForModals';
 
 Modal.setAppElement('#root');
 
-const DeleteHeroModal = ({ hero, isDeleteModalOpen, setIsModalOpen }) => {
+const DeleteHeroModal = ({ hero, isDeleteModalOpen, setIsModalOpen, currentPageNumber }) => {
   const dispatch = useDispatch();
 
   const deleteHandler = async () => {
     await deleteHero(hero.id);
-    dispatch(getHeroes());
+    dispatch(getHeroes(currentPageNumber));
   };
 
   return (

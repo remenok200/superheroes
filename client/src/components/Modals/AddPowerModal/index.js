@@ -17,7 +17,7 @@ const initialValues = {
   powerName: '',
 };
 
-const AddPowerModal = ({ hero, isAddPowerModalOpen, setIsModalOpen }) => {
+const AddPowerModal = ({ hero, isAddPowerModalOpen, setIsModalOpen, currentPageNumber }) => {
   const dispatch = useDispatch();
 
   const handleAddPowerSubmit = async (values, { resetForm }) => {
@@ -25,7 +25,7 @@ const AddPowerModal = ({ hero, isAddPowerModalOpen, setIsModalOpen }) => {
       await addPower(hero.id, {
         powers: [values.powerName],
       });
-      dispatch(getHeroes());
+      dispatch(getHeroes(currentPageNumber));
       resetForm();
       setIsModalOpen(false);
     } catch (error) {
