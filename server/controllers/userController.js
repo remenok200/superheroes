@@ -28,11 +28,11 @@ module.exports.loginUser = async (req, res, next) => {
         foundUser.passwordHash
       );
       if (!result) {
-        return next(createHttpError(404));
+        return next(createHttpError(404, 'Incorrect email or password'));
       }
       return res.status(200).send({ data: foundUser });
     }
-    return next(createHttpError(404));
+    return next(createHttpError(404, 'Incorrect email or password'));
   } catch (error) {
     next(error);
   }

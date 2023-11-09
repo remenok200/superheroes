@@ -3,6 +3,7 @@ import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
+import HomePage from 'pages/HomePage';
 
 function App() {
   const { error } = useSelector((state) => state.heroes);
@@ -34,7 +35,8 @@ function App() {
         pauseOnHover
         theme="light"
       />
-      <HeroesPage />
+      {/* <HeroesPage /> */}
+      <HomePage />
     </>
   );
 }
