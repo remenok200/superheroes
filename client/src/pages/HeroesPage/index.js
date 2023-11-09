@@ -4,8 +4,6 @@ import HashLoader from 'react-spinners/HashLoader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getHeroes } from 'redux/slices/heroSlice';
 
-import CONSTANTS from 'constants/paginate';
-
 import Hero from 'components/Hero';
 import AddHeroModal from 'components/Modals/AddHeroModal';
 
