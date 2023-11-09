@@ -11,7 +11,7 @@ import AddHeroModal from 'components/Modals/AddHeroModal';
 import styles from './Heroes.module.scss';
 
 const HeroesPage = () => {
-  const { heroes, totalHeroesCount, isLoading, error } = useSelector(
+  const { heroes, totalHeroesCount, lastPageNumber, isLoading, error } = useSelector(
     (state) => state.heroes
   );
   const dispatch = useDispatch();
@@ -20,22 +20,20 @@ const HeroesPage = () => {
   const [isAddHeroModalOpen, setIsAddHeroModalOpen] = useState(false);
 
   const [currentPageNumber, setCurrentPageNumber] = useState(0);
-  const [maxPageNumber, setMaxPageNumber] = useState(0);
   const [prevButtonDisabled, setPrevButtonDisabled] = useState(true);
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
 
   useEffect(() => {
     setPrevButtonDisabled(currentPageNumber === 0);
-    setNextButtonDisabled(currentPageNumber === maxPageNumber - 1);
-  }, [currentPageNumber, maxPageNumber]);
+    setNextButtonDisabled(currentPageNumber === lastPageNumber - 1);
+  }, [currentPageNumber, lastPageNumber]);
 
   useEffect(() => {
-    setMaxPageNumber(Math.ceil(totalHeroesCount / CONSTANTS.ITEMS_PER_PAGE));
     dispatch(getHeroes(currentPageNumber));
   }, [currentPageNumber, totalHeroesCount]);
 
   const nextPageHandler = () => {
-    if (currentPageNumber < maxPageNumber - 1) {
+    if (currentPageNumber < lastPageNumber - 1) {
       setCurrentPageNumber(currentPageNumber + 1);
     }
   };
@@ -91,7 +89,7 @@ const HeroesPage = () => {
           Next page
         </button>
         <p>You are on the page: {currentPageNumber + 1}</p>
-        <p>Total number of pages: {maxPageNumber}</p>
+        <p>Total number of pages: {lastPageNumber}</p>
       </div>
     </section>
   );

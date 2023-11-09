@@ -15,7 +15,11 @@ const getHeroes = createAsyncThunk(
         data: { data: superheroes, totalHeroesCount },
       } = await API.getHeroes(limit, offset);
 
-      return { superheroes, totalHeroesCount };
+      const lastPageNumber = Math.ceil(
+        totalHeroesCount / CONSTANTS.ITEMS_PER_PAGE
+      );
+
+      return { superheroes, totalHeroesCount, lastPageNumber };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -107,6 +111,7 @@ const initialState = {
   isLoading: false,
   error: null,
   totalHeroesCount: 0,
+  lastPageNumber: 0
 };
 
 const heroSlice = createSlice({
@@ -122,9 +127,10 @@ const heroSlice = createSlice({
       state.isLoading = false;
       state.error = null;
 
-      const { superheroes, totalHeroesCount } = action.payload;
+      const { superheroes, totalHeroesCount, lastPageNumber } = action.payload;
       state.heroes = superheroes;
       state.totalHeroesCount = totalHeroesCount;
+      state.lastPageNumber = lastPageNumber;
     });
     builder.addCase(getHeroes.rejected, (state, action) => {
       state.isLoading = false;
