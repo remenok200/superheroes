@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { Formik, Form } from 'formik';
 
-import { getHeroes } from 'redux/slices/heroSlice';
+import { getHeroes, addImage } from 'redux/slices/heroSlice';
 
 import { customStyles } from 'common/styles/customStylesForModals';
 
@@ -14,7 +14,7 @@ const AddHeroImageModal = ({
   hero,
   isHeroImageAddModalOpen,
   setIsModalOpen,
-  currentPageNumber
+  currentPageNumber,
 }) => {
   const dispatch = useDispatch();
 
@@ -24,17 +24,8 @@ const AddHeroImageModal = ({
       formData.append('images', image);
     });
     try {
-      // request on server
-      const response = await fetch(
-        `http://localhost:5000/api/superheroes/${hero.id}/images`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-      if (response.ok) {
-        dispatch(getHeroes(currentPageNumber));
-      }
+      await dispatch(addImage({ heroId: hero.id, formData }));
+      dispatch(getHeroes(currentPageNumber));
     } catch (error) {
       console.error(error);
     } finally {

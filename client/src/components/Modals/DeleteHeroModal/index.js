@@ -2,8 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { useDispatch } from 'react-redux';
 
-import { deleteHero } from 'api/superheroesApi';
-import { getHeroes } from 'redux/slices/heroSlice';
+import { getHeroes, deleteHero } from 'redux/slices/heroSlice';
 
 import { customStyles } from 'common/styles/customStylesForModals';
 
@@ -13,7 +12,7 @@ const DeleteHeroModal = ({ hero, isDeleteModalOpen, setIsModalOpen, currentPageN
   const dispatch = useDispatch();
 
   const deleteHandler = async () => {
-    await deleteHero(hero.id);
+    await dispatch(deleteHero(hero.id));
     dispatch(getHeroes(currentPageNumber));
   };
 

@@ -2,8 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-import { addHero } from 'api/superheroesApi';
-import { getHeroes } from 'redux/slices/heroSlice';
+import { getHeroes, addHero } from 'redux/slices/heroSlice';
 
 import { customStyles } from 'common/styles/customStylesForModals';
 
@@ -22,8 +21,8 @@ const AddHeroModal = ({
 
   const handleAddHeroSubmit = async (values, { resetForm }) => {
     try {
-      await addHero(values);
-      dispatch(getHeroes());
+      await dispatch(addHero(values));
+      dispatch(getHeroes(0));
       setCurrentPageNumber(0);
       resetForm();
       setIsModalOpen(false);

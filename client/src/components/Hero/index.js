@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import Slider from 'react-slick';
 
-import { deletePower, deleteImage } from 'api/superheroesApi';
-import { getHeroes } from 'redux/slices/heroSlice';
+import { getHeroes, deletePower, deleteImage } from 'redux/slices/heroSlice';
 import { useDispatch } from 'react-redux';
 
 import 'slick-carousel/slick/slick.css';
@@ -36,12 +35,14 @@ const Hero = ({ hero, currentPageNumber, setCurrentPageNumber }) => {
   };
 
   const deletePowerHandler = async (powerId) => {
-    await deletePower(hero.id, powerId);
+    await dispatch(deletePower({ heroId: hero.id, powerId }));
     dispatch(getHeroes(currentPageNumber));
   };
 
   const deleteImageHandler = async () => {
-    await deleteImage(hero.id, hero.images[currentSlide].id);
+    await dispatch(
+      deleteImage({ heroId: hero.id, imageId: hero.images[currentSlide].id })
+    );
     dispatch(getHeroes(currentPageNumber));
   };
 

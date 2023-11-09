@@ -2,8 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-import { editHero } from 'api/superheroesApi';
-import { getHeroes } from 'redux/slices/heroSlice';
+import { getHeroes, editHero } from 'redux/slices/heroSlice';
 
 import { customStyles } from 'common/styles/customStylesForModals';
 
@@ -13,12 +12,17 @@ import { useDispatch } from 'react-redux';
 
 Modal.setAppElement('#root');
 
-const EditHeroModal = ({ hero, isEditHeroModalOpen, setIsModalOpen, setCurrentPageNumber }) => {
+const EditHeroModal = ({
+  hero,
+  isEditHeroModalOpen,
+  setIsModalOpen,
+  setCurrentPageNumber,
+}) => {
   const dispatch = useDispatch();
 
   const handleEditHeroSubmit = async (values, { resetForm }) => {
     try {
-      await editHero(hero.id, values);
+      await dispatch(editHero({ heroId: hero.id, updates: values }));
       dispatch(getHeroes());
       setCurrentPageNumber(0);
       resetForm();
