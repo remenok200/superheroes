@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import HashLoader from 'react-spinners/HashLoader';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getHeroes } from 'redux/slices/heroSlice';
@@ -11,9 +12,8 @@ import AddHeroModal from 'components/Modals/AddHeroModal';
 import styles from './Heroes.module.scss';
 
 const HeroesPage = () => {
-  const { heroes, totalHeroesCount, lastPageNumber, isLoading, error } = useSelector(
-    (state) => state.heroes
-  );
+  const { heroes, totalHeroesCount, lastPageNumber, isLoading, error } =
+    useSelector((state) => state.heroes);
   const dispatch = useDispatch();
 
   const [searchHero, setSearchHero] = useState('');
@@ -57,6 +57,16 @@ const HeroesPage = () => {
     />
   ));
 
+  if (isLoading) {
+    return (
+      <HashLoader
+        color="white"
+        cssOverride={{ display: 'block', margin: '0 auto' }}
+        size={400}
+      />
+    );
+  }
+
   return (
     <section>
       <input
@@ -76,9 +86,7 @@ const HeroesPage = () => {
           setCurrentPageNumber={setCurrentPageNumber}
         />
       )}
-
-      {isLoading && <h1>LOADING...</h1>}
-      {error && <h1>ERROR...</h1>}
+      
       {heroesCards}
 
       <div>
