@@ -12,8 +12,9 @@ import AddHeroModal from 'components/Modals/AddHeroModal';
 import styles from './Heroes.module.scss';
 
 const HeroesPage = () => {
-  const { heroes, totalHeroesCount, lastPageNumber, isLoading, error } =
-    useSelector((state) => state.heroes);
+  const { heroes, totalHeroesCount, lastPageNumber, isLoading } = useSelector(
+    (state) => state.heroes
+  );
   const dispatch = useDispatch();
 
   const [searchHero, setSearchHero] = useState('');
@@ -25,7 +26,7 @@ const HeroesPage = () => {
 
   useEffect(() => {
     setPrevButtonDisabled(currentPageNumber === 0);
-    setNextButtonDisabled(currentPageNumber === lastPageNumber - 1);
+    setNextButtonDisabled(currentPageNumber === lastPageNumber - 1 || totalHeroesCount === 0);
   }, [currentPageNumber, lastPageNumber]);
 
   useEffect(() => {
@@ -86,7 +87,7 @@ const HeroesPage = () => {
           setCurrentPageNumber={setCurrentPageNumber}
         />
       )}
-      
+
       {heroesCards}
 
       <div>
