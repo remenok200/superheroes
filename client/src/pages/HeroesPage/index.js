@@ -26,7 +26,9 @@ const HeroesPage = () => {
 
   useEffect(() => {
     setPrevButtonDisabled(currentPageNumber === 0);
-    setNextButtonDisabled(currentPageNumber === lastPageNumber - 1 || totalHeroesCount === 0);
+    setNextButtonDisabled(
+      currentPageNumber === lastPageNumber - 1 || totalHeroesCount === 0
+    );
   }, [currentPageNumber, lastPageNumber]);
 
   useEffect(() => {
@@ -88,7 +90,11 @@ const HeroesPage = () => {
         />
       )}
 
-      {heroesCards}
+      {heroesCards.length > 0 ? (
+        heroesCards
+      ) : (
+        <h2>There are no superheroes. Add them</h2>
+      )}
 
       <div>
         <button onClick={prevPageHandler} disabled={prevButtonDisabled}>
