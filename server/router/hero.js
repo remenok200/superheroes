@@ -9,16 +9,18 @@ const { uploadImages } = require('../utils/fileUpload');
 
 const paginate = require('../middlewares/paginate');
 
+const { checkToken } = require('../middlewares/checkToken');
+
 heroRouter
   .route('/')
-  .get(paginate, HeroController.getHeroes)
-  .post(uploadImages, HeroController.createHero);
+  .get(checkToken, paginate, HeroController.getHeroes)
+  .post(checkToken, uploadImages, HeroController.createHero);
 
 heroRouter
   .route('/:id')
-  .get(HeroController.getHeroById)
-  .put(uploadImages, HeroController.updateHeroById)
-  .delete(HeroController.deleteHeroById);
+  .get(checkToken, HeroController.getHeroById)
+  .put(checkToken, uploadImages, HeroController.updateHeroById)
+  .delete(checkToken, HeroController.deleteHeroById);
 
 // localhost:5000/api/superheroes/<heroId>/images
 heroRouter.use('/:heroId/images', imageRouter);

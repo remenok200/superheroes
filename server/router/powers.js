@@ -2,12 +2,16 @@ const powerRouter = require('express').Router({ mergeParams: true });
 
 const PowerController = require('../controllers/powerController');
 
+const { checkToken } = require('../middlewares/checkToken');
+
 powerRouter
   .route('/')
-  .get(PowerController.getHeroPowers)
-  .post(PowerController.addHeroPowers);
+  .get(checkToken, PowerController.getHeroPowers)
+  .post(checkToken, PowerController.addHeroPowers);
 
 // localhost:5000/api/superheroes/<heroId>/powers/<powerId>
-powerRouter.route('/:powerId').delete(PowerController.deletePower);
+powerRouter
+.route('/:powerId')
+.delete(checkToken, PowerController.deletePower);
 
 module.exports = powerRouter;
