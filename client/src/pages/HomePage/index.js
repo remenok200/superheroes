@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import SignIn from 'components/SignIn';
 import SignUp from 'components/SignUp';
 
+import HashLoader from 'react-spinners/HashLoader';
+
 import { useSelector } from 'react-redux';
 
 import styles from './HomePage.module.scss';
 
 const HomePage = () => {
-  const { isLoading, error } = useSelector(state => state.user);
+  const { isLoading, error } = useSelector((state) => state.user);
 
   const [state, setState] = useState(true);
 
@@ -16,6 +18,17 @@ const HomePage = () => {
   };
 
   const textButton = state ? 'SignIn' : 'SignUp';
+
+  if (isLoading) {
+    return (
+      <HashLoader
+        color="white"
+        cssOverride={{ display: 'block', margin: '0 auto' }}
+        size={400}
+      />
+    );
+  }
+
   return (
     <div className={styles.container}>
       <header>
