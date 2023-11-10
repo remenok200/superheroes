@@ -14,7 +14,7 @@ module.exports.registrationUser = async (req, res, next) => {
 
     const createdUser = await User.create({ ...body, passwordHash });
 
-    const accesToken = await createAccessToken({
+    const accessToken = await createAccessToken({
       userId: createdUser._id,
       email: createdUser.email,
       role: createdUser.role,
@@ -33,7 +33,7 @@ module.exports.registrationUser = async (req, res, next) => {
 
     return res
       .status(201)
-      .send({ data: createdUser, tokens: { accesToken, refreshToken } });
+      .send({ data: createdUser, tokens: { accessToken, refreshToken } });
   } catch (error) {
     next(error);
   }
@@ -56,7 +56,7 @@ module.exports.loginUser = async (req, res, next) => {
         return next(createHttpError(404, 'Incorrect email or password'));
       }
 
-      const accesToken = await createAccessToken({
+      const accessToken = await createAccessToken({
         userId: foundUser._id,
         email: foundUser.email,
         role: foundUser.role,
@@ -75,7 +75,7 @@ module.exports.loginUser = async (req, res, next) => {
 
       return res
         .status(200)
-        .send({ data: foundUser, tokens: { accesToken, refreshToken } });
+        .send({ data: foundUser, tokens: { accessToken, refreshToken } });
     }
     return next(createHttpError(404, 'Incorrect email or password'));
   } catch (error) {
@@ -115,7 +115,7 @@ module.exports.refreshSession = async (req, res, next) => {
       const foundUser = await User.findOne({
         email: verifyResult.email,
       });
-
+      
       const rTFromDB = await RefreshToken.findOne({
         $and: [{ token: refreshToken }, { userId: foundUser._id }],
       });
