@@ -1,5 +1,6 @@
 const { Image } = require('../models');
 const createHttpError = require('http-errors');
+const { deleteImage } = require('../utils');
 
 module.exports.getHeroImages = async (req, res, next) => {
   try {
@@ -59,6 +60,12 @@ module.exports.deleteImage = async (req, res, next) => {
       params: { heroId, imageId },
     } = req;
 
+    const image = await Image.findOne({ where: { heroId, id: imageId } });
+
+    if (!image) {
+      return next(createHttpError(404));
+    }
+
     const count = await Image.destroy({
       where: {
         heroId,
@@ -69,6 +76,8 @@ module.exports.deleteImage = async (req, res, next) => {
     if (count === 0) {
       return next(createHttpError(404));
     }
+
+    deleteImage(image.path);
 
     return res.status(200).end();
   } catch (error) {

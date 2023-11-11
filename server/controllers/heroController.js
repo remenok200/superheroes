@@ -1,5 +1,6 @@
 const { Superhero, SuperPower, Image } = require('../models');
 const createHttpError = require('http-errors');
+const { deleteImage } = require('../utils');
 
 module.exports.createHero = async (req, res, next) => {
   try {
@@ -184,13 +185,30 @@ module.exports.deleteHeroById = async (req, res, next) => {
       params: { id },
     } = req;
 
-    const count = await Superhero.destroy({ where: { id } });
+    const hero = await Superhero.findByPk(id, {
+      include: [
+        {
+          model: Image,
+          attributes: ['id', 'path'],
+          as: 'images',
+        },
+      ],
+    });
 
-    if (count === 0) {
+    if (!hero) {
       return next(createHttpError(404));
     }
 
-    return res.status(200).end();
+    if (hero.images.length) {
+      for (let i = 0; i < hero.images.length; i++) {
+        const imagePath = hero.images[i].path;
+        await deleteImage(imagePath);
+      }
+    }
+
+    hero.destroy();
+
+    return res.status(200).send({ data: hero });
   } catch (error) {
     next(error);
   }
