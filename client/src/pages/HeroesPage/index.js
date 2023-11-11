@@ -9,6 +9,8 @@ import AddHeroModal from 'components/Modals/AddHeroModal';
 
 import styles from './Heroes.module.scss';
 
+import history from 'browserHistory';
+
 const HeroesPage = () => {
   const { heroes, totalHeroesCount, lastPageNumber, isLoading } = useSelector(
     (state) => state.heroes
@@ -49,6 +51,11 @@ const HeroesPage = () => {
     hero.nickname.toLowerCase().includes(searchHero.toLowerCase())
   );
 
+  const logOutHandler = () => {
+    localStorage.clear();
+    history.push('/');
+  }
+
   const heroesCards = filteredHeroes.map((hero) => (
     <Hero
       key={hero.id}
@@ -87,6 +94,8 @@ const HeroesPage = () => {
           setCurrentPageNumber={setCurrentPageNumber}
         />
       )}
+
+      <button onClick={logOutHandler}>Log out</button>
 
       {heroesCards.length > 0 ? (
         heroesCards
