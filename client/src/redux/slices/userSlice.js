@@ -73,6 +73,18 @@ const unbanUser = createAsyncThunk(
   }
 );
 
+const deleteAllInvalidRefreshTokens = createAsyncThunk(
+  `${SLICE_NAME}/deleteAllInvalidRefreshTokens`,
+  async (arg, thunkAPI) => {
+    try {
+      await API.deleteAllInvalidRefreshTokens();
+      return 0;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   user: null,
   allUsers: null,
@@ -156,10 +168,34 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    // deleteAllInvalidRefreshTokens
+    builder.addCase(deleteAllInvalidRefreshTokens.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+    builder.addCase(
+      deleteAllInvalidRefreshTokens.fulfilled,
+      (state, action) => {
+        state.error = null;
+        state.isLoading = false;
+      }
+    );
+    builder.addCase(deleteAllInvalidRefreshTokens.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
 // Async Thunks
-export { loginUser, registerUser, getAllUsers, banUser, unbanUser };
+export {
+  loginUser,
+  registerUser,
+  getAllUsers,
+  banUser,
+  unbanUser,
+  deleteAllInvalidRefreshTokens,
+};
 
 export default userSlice.reducer;

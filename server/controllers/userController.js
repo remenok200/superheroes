@@ -179,3 +179,27 @@ module.exports.getAllUsers = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.deleteAllInvalidRefreshTokens = async (req, res, next) => {
+  try {
+    const allTokens = await RefreshToken.find();
+
+    const invalidTokens = [];
+
+    for (let token of allTokens) {
+      try {
+        await verifyRefreshToken(token.token);
+      } catch (error) {
+        invalidTokens.push(token._id);
+      }
+    }
+
+    if (invalidTokens.length > 0) {
+      await RefreshToken.deleteMany({ _id: { $in: invalidTokens } });
+    }
+
+    return res.status(200).send('Invalid tokens deleted successfully');
+  } catch (error) {
+    next(error);
+  }
+};

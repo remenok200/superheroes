@@ -40,6 +40,9 @@ export const banUser = async (banData) =>
 export const unbanUser = async (userId) =>
   await httpClient.post('/banlist-unban', userId);
 
+export const deleteAllInvalidRefreshTokens = async () =>
+  await httpClient.delete('/invalid-tokens');
+
 export const authUser = async () => await httpClient.get('/');
 
 httpClient.interceptors.request.use(

@@ -36,4 +36,8 @@ userRouter
 .route('/all')
 .get(checkToken, checkBan, checkAdmin, UserController.getAllUsers);
 
+userRouter
+.route('/invalid-tokens')
+.delete(checkToken, checkBan, checkAdmin, UserController.deleteAllInvalidRefreshTokens);
+
 module.exports = userRouter;
