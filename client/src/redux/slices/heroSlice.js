@@ -85,10 +85,7 @@ const addImage = createAsyncThunk(
   `${SLICE_NAME}/addImage`,
   async ({ heroId, formData }, thunkAPI) => {
     try {
-      await fetch(`http://localhost:5000/api/superheroes/${heroId}/images`, {
-        method: 'POST',
-        body: formData,
-      });
+      await API.addImage(heroId, formData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
