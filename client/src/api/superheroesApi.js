@@ -76,6 +76,17 @@ httpClient.interceptors.response.use(
 
 export const refreshUser = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
-  const { data } = await httpClient.post('/users/refresh', { refreshToken });
+
+  let geolocation;
+  navigator.geolocation.getCurrentPosition(
+    ({ coords: { latitude, longitude } }) => {
+      geolocation = `${latitude} ${longitude}`;
+    }
+  );
+
+  const { data } = await httpClient.post('/users/refresh', {
+    refreshToken,
+    geolocation,
+  });
   return data;
 };

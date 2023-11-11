@@ -1,19 +1,32 @@
 import axios from 'axios';
 import history from 'browserHistory';
 
+let geolocation;
+navigator.geolocation.getCurrentPosition(
+  ({ coords: { latitude, longitude } }) => {
+    geolocation = `${latitude} ${longitude}`;
+  }
+);
+
 const httpClient = axios.create({
   baseURL: 'http://localhost:5000/api/users',
 });
 
 export const loginUser = async (userData) => {
-  const response = await httpClient.post('/sign-in', userData);
+  const response = await httpClient.post('/sign-in', {
+    ...userData,
+    geolocation,
+  });
   if (response.status === 200) {
     history.push('/heroes');
   }
 };
 
 export const registerUser = async (userData) => {
-  const response = await httpClient.post('/sign-up', userData);
+  const response = await httpClient.post('/sign-up', {
+    ...userData,
+    geolocation,
+  });
   if (response.status === 201) {
     history.push('/heroes');
   }
@@ -66,6 +79,9 @@ httpClient.interceptors.response.use(
 
 export const refreshUser = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
-  const { data } = await httpClient.post('/refresh', { refreshToken });
+  const { data } = await httpClient.post('/refresh', {
+    refreshToken,
+    geolocation,
+  });
   return data;
 };
