@@ -31,8 +31,23 @@ const loginUser = createAsyncThunk(
   }
 );
 
+const getAllUsers = createAsyncThunk(
+  `${SLICE_NAME}/getAllUsers`,
+  async (arg, thunkAPI) => {
+    try {
+      const {
+        data: { data },
+      } = await API.getAllUsers();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   user: null,
+  allUsers: null,
   isLoading: false,
   error: null,
 };
@@ -70,10 +85,25 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    // getAllUsers
+    builder.addCase(getAllUsers.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+    builder.addCase(getAllUsers.fulfilled, (state, action) => {
+      state.error = null;
+      state.isLoading = false;
+      state.allUsers = action.payload;
+    });
+    builder.addCase(getAllUsers.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
 // Async Thunks
-export { loginUser, registerUser };
+export { loginUser, registerUser, getAllUsers };
 
 export default userSlice.reducer;

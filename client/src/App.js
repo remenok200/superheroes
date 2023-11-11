@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 
 import HomePage from 'pages/HomePage';
+import AdminPanel from 'pages/AdminPanelPage';
 
 function App() {
   const { error } = useSelector((state) => state.heroes);
@@ -37,6 +38,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/heroes" element={<HeroesPage />} />
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
 
         <ToastContainer

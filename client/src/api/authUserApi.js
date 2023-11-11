@@ -32,6 +32,8 @@ export const registerUser = async (userData) => {
   }
 };
 
+export const getAllUsers = async () => await httpClient.get('/all');
+
 export const authUser = async () => await httpClient.get('/');
 
 httpClient.interceptors.request.use(
@@ -83,5 +85,6 @@ export const refreshUser = async () => {
     refreshToken,
     geolocation,
   });
+  
   return data;
 };

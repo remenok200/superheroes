@@ -11,17 +11,18 @@ const paginate = require('../middlewares/paginate');
 
 const { checkToken } = require('../middlewares/checkToken');
 const { checkAdmin } = require('../middlewares/checkAdmin');
+const { checkBan } = require('../middlewares/checkBan');
 
 heroRouter
   .route('/')
-  .get(checkToken, paginate, HeroController.getHeroes)
-  .post(checkToken, checkAdmin, uploadImages, HeroController.createHero);
+  .get(checkToken, checkBan, paginate, HeroController.getHeroes)
+  .post(checkToken, checkBan, checkAdmin, uploadImages, HeroController.createHero);
 
 heroRouter
   .route('/:id')
-  .get(checkToken, HeroController.getHeroById)
-  .put(checkToken, checkAdmin, uploadImages, HeroController.updateHeroById)
-  .delete(checkToken, checkAdmin, HeroController.deleteHeroById);
+  .get(checkToken, checkBan, HeroController.getHeroById)
+  .put(checkToken, checkBan, checkAdmin, uploadImages, HeroController.updateHeroById)
+  .delete(checkToken, checkBan, checkAdmin, HeroController.deleteHeroById);
 
 // localhost:5000/api/superheroes/<heroId>/images
 heroRouter.use('/:heroId/images', imageRouter);

@@ -6,16 +6,17 @@ const { uploadImages } = require('../utils/fileUpload');
 
 const { checkToken } = require('../middlewares/checkToken');
 const { checkAdmin } = require('../middlewares/checkAdmin');
+const { checkBan } = require('../middlewares/checkBan');
 
 imageRouter
   .route('/')
-  .get(checkToken, ImageController.getHeroImages)
-  .post(checkToken, checkAdmin, uploadImages, ImageController.addHeroImages);
+  .get(checkToken, checkBan, ImageController.getHeroImages)
+  .post(checkToken, checkBan, checkAdmin, uploadImages, ImageController.addHeroImages);
 
 // localhost:5000/api/superheroes/<heroId>/images/<imageId>
 imageRouter
   .route('/:imageId')
-  .get(checkToken, ImageController.getImage)
-  .delete(checkToken, checkAdmin, ImageController.deleteImage);
+  .get(checkToken, checkBan, ImageController.getImage)
+  .delete(checkToken, checkBan, checkAdmin, ImageController.deleteImage);
 
 module.exports = imageRouter;

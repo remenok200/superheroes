@@ -1,6 +1,6 @@
 const createHttpError = require('http-errors');
 const bcrypt = require('bcrypt');
-const { User, RefreshToken } = require('../models/MongoDB');
+const { User, RefreshToken, Banlist } = require('../models/MongoDB');
 const {
   createAccessToken,
   createRefreshToken,
@@ -115,7 +115,7 @@ module.exports.refreshSession = async (req, res, next) => {
       const foundUser = await User.findOne({
         email: verifyResult.email,
       });
-      
+
       const rTFromDB = await RefreshToken.findOne({
         $and: [{ token: refreshToken }, { userId: foundUser._id }],
       });
@@ -135,25 +135,46 @@ module.exports.refreshSession = async (req, res, next) => {
           email: foundUser.email,
           role: foundUser.role,
         });
-        
+
         await RefreshToken.create({
           token: newRefreshToken,
           userId: foundUser._id,
           geolocation,
         });
 
-        return res
-          .status(200)
-          .send({
-            tokens: {
-              accessToken: newAccessToken,
-              refreshToken: newRefreshToken,
-            },
-          });
+        return res.status(200).send({
+          tokens: {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+          },
+        });
       } else {
         next(createHttpError(401, 'Invalid refresh token'));
       }
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.getAllUsers = async (req, res, next) => {
+  try {
+    const allUsers = await User.find();
+
+    const usersWithBans = [];
+
+    for (let user of allUsers) {
+      const ban = await Banlist.findOne({ userId: user._id });
+
+      const userInfo = {
+        user,
+        banInfo: ban,
+      };
+
+      usersWithBans.push(userInfo);
+    }
+
+    return res.status(200).send({ data: usersWithBans });
   } catch (error) {
     next(error);
   }
