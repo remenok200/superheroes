@@ -45,6 +45,34 @@ const getAllUsers = createAsyncThunk(
   }
 );
 
+const banUser = createAsyncThunk(
+  `${SLICE_NAME}/banUser`,
+  async (banData, thunkAPI) => {
+    try {
+      const {
+        data: { data },
+      } = await API.banUser(banData);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const unbanUser = createAsyncThunk(
+  `${SLICE_NAME}/unbanUser`,
+  async (userId, thunkAPI) => {
+    try {
+      const {
+        data: { data },
+      } = await API.unbanUser({ userId });
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   user: null,
   allUsers: null,
@@ -100,10 +128,38 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    // banUser
+    builder.addCase(banUser.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+    builder.addCase(banUser.fulfilled, (state, action) => {
+      state.error = null;
+      state.isLoading = false;
+    });
+    builder.addCase(banUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+
+    // unbanUser
+    builder.addCase(unbanUser.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+    builder.addCase(unbanUser.fulfilled, (state, action) => {
+      state.error = null;
+      state.isLoading = false;
+    });
+    builder.addCase(unbanUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
 // Async Thunks
-export { loginUser, registerUser, getAllUsers };
+export { loginUser, registerUser, getAllUsers, banUser, unbanUser };
 
 export default userSlice.reducer;

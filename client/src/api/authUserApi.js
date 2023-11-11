@@ -34,6 +34,12 @@ export const registerUser = async (userData) => {
 
 export const getAllUsers = async () => await httpClient.get('/all');
 
+export const banUser = async (banData) =>
+  await httpClient.post('/banlist', banData);
+
+export const unbanUser = async (userId) =>
+  await httpClient.post('/banlist-unban', userId);
+
 export const authUser = async () => await httpClient.get('/');
 
 httpClient.interceptors.request.use(
@@ -85,6 +91,6 @@ export const refreshUser = async () => {
     refreshToken,
     geolocation,
   });
-  
+
   return data;
 };
