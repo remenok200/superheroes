@@ -19,7 +19,7 @@ function App() {
   const { error } = useSelector((state) => state.heroes);
 
   if (error) {
-    toast.error('🦄 An error occured!', {
+    toast.error(`🦄 ${error}`, {
       position: 'top-center',
       autoClose: 5000,
       hideProgressBar: false,
