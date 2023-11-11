@@ -103,12 +103,23 @@ const addHero = createAsyncThunk(
   }
 );
 
+const createRandomHero = createAsyncThunk(
+  `${SLICE_NAME}/createRandomHero`,
+  async (arg, thunkAPI) => {
+    try {
+      await API.createRandomHero();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   heroes: [],
   isLoading: false,
   error: null,
   totalHeroesCount: 0,
-  lastPageNumber: 0
+  lastPageNumber: 0,
 };
 
 const heroSlice = createSlice({
@@ -231,6 +242,20 @@ const heroSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    // createRandomHero
+    builder.addCase(createRandomHero.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+    builder.addCase(createRandomHero.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+    builder.addCase(createRandomHero.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
@@ -244,6 +269,7 @@ export {
   deleteImage,
   addImage,
   addHero,
+  createRandomHero,
 };
 
 export default heroSlice.reducer;

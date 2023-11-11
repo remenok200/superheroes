@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import HashLoader from 'react-spinners/HashLoader';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getHeroes } from 'redux/slices/heroSlice';
+import { getHeroes, createRandomHero } from 'redux/slices/heroSlice';
 
 import Hero from 'components/Hero';
 import AddHeroModal from 'components/Modals/AddHeroModal';
@@ -54,7 +54,12 @@ const HeroesPage = () => {
   const logOutHandler = () => {
     localStorage.clear();
     history.push('/');
-  }
+  };
+
+  const createRandomHeroHandler = async () => {
+    await dispatch(createRandomHero());
+    await dispatch(getHeroes(currentPageNumber));
+  };
 
   const heroesCards = filteredHeroes.map((hero) => (
     <Hero
@@ -94,6 +99,8 @@ const HeroesPage = () => {
           setCurrentPageNumber={setCurrentPageNumber}
         />
       )}
+
+      <button onClick={createRandomHeroHandler}>Create random hero</button>
 
       <button onClick={logOutHandler}>Log out</button>
 

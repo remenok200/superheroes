@@ -24,6 +24,10 @@ heroRouter
   .put(checkToken, checkBan, checkAdmin, uploadImages, HeroController.updateHeroById)
   .delete(checkToken, checkBan, checkAdmin, HeroController.deleteHeroById);
 
+heroRouter
+  .route('/random')
+  .post(checkToken, checkBan, checkAdmin, HeroController.createRandomHero);
+
 // localhost:5000/api/superheroes/<heroId>/images
 heroRouter.use('/:heroId/images', imageRouter);
 // localhost:5000/api/superheroes/<heroId>/powers

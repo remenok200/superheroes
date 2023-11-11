@@ -29,6 +29,9 @@ export const deleteImage = async (heroId, imageId) =>
 export const addImage = async (heroId, formData) =>
   await httpClient.post(`/superheroes/${heroId}/images`, formData);
 
+export const createRandomHero = async () =>
+  await httpClient.post('/superheroes/random');
+
 export const authUser = async () => await httpClient.get('/users');
 
 httpClient.interceptors.request.use(
